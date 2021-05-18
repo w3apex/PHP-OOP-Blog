@@ -35,7 +35,7 @@ class Database {
 		}
 	}
 
-	public function insert($query){
+	public function insert($query) {
 		$result = $this->conn->query($query);
 
 		if ($result) {
@@ -43,7 +43,25 @@ class Database {
 		} else {
 			return false;
 		}
-		
+	}
+
+	public function update($query) {
+		$update = $this->conn->query($query);
+
+		if ($update) {
+			return $update;
+		} else {
+			return false;
+		}
+	}
+
+	public function delete($query){
+		$delete = $this->conn->query($query);
+		if ($delete) {
+			return $delete;
+		} else {
+			return false;
+		}
 	}
 
 }

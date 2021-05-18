@@ -44,9 +44,7 @@
             <!-- LEFTSIDE header -->
             <div class="leftside-header">
                 <div class="logo">
-                    <a href="index.html" class="on-click">
-                        <img alt="logo" src="images/header-logo.png" />
-                    </a>
+                    
                 </div>
                 <div id="menu-toggle" class="visible-xs toggle-left-sidebar" data-toggle-class="left-sidebar-open" data-target="html">
                     <i class="fa fa-bars" aria-label="Toggle sidebar"></i>
