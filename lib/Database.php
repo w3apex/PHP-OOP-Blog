@@ -35,6 +35,17 @@ class Database {
 		}
 	}
 
+	public function insert($query){
+		$result = $this->conn->query($query);
+
+		if ($result) {
+			return $result;
+		} else {
+			return false;
+		}
+		
+	}
+
 }
 
 /*$db = new Database();

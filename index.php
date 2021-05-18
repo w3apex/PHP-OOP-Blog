@@ -103,7 +103,7 @@
           <!-- Pagination End -->
           <?php 
             } else {
-              echo "No post availavle..!!";
+              echo "Post nai............!!";
             }
           ?>
 
