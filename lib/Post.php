@@ -5,9 +5,9 @@
 ?>
 <?php
 	class Post {
-
 		private $db;
 		private $fm;
+		private $fileObj;
 		
 		public function __construct() {
 			$this->db      = new Database();
@@ -24,13 +24,10 @@
 		}
 
 		public function store($data, $file) { 
-			//$data = $_POST;
-			//$_POST['cat'];
-			//$data['cat'];
 
-			if (!empty($data['cat']) && !empty($data['title']) && !empty($file['image']['name']) && !empty($data['content']) && !empty($data['tags']) && !empty($data['author'])) {
-            	
-            	//$cat = $data['cat'] == $cat = $_POST['cat'];
+			if (!empty($data['cat']) && !empty($data['title']) && 
+				!empty($file['image']['name']) && !empty($data['content']) && 
+				!empty($data['tags']) && !empty($data['author'])) {
 
             	$cat     = $this->fm->validation($data['cat']);
             	$title   = $this->fm->validation($data['title']);

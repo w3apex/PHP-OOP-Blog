@@ -1,3 +1,10 @@
+<?php
+    include ("../lib/Session.php");
+    Session::init();
+    //session_start();
+    //$sess = new Session();
+    //$sess->init();
+?>
 <!DOCTYPE html>
 <html lang="en" class="fixed left-sidebar-top">
 <head>
@@ -51,7 +58,11 @@
                     <i class="fa fa-search search" id="search-icon" aria-hidden="true"></i>
                     <div class="header-separator"></div>
                 </div>
-
+                <?php
+                    if (isset($_GET['action']) && $_GET['action'] == "logout") {
+                        Session::destroy();
+                    }
+                ?>
                 <!--USER HEADERBOX -->
                 <div class="header-section" id="user-headerbox">
                     <div class="user-header-wrap">
@@ -59,8 +70,8 @@
                             <img alt="profile photo" src="images/avatar/avatar_user.jpg" />
                         </div>
                         <div class="user-info">
-                            <span class="user-name">Jane Doe</span>
-                            <span class="user-profile">Admin</span>
+                            <span class="user-name"><?php echo Session::get("adminName");?></span>
+                            <span class="user-profile"><?php echo Session::get("adminRole");?></span>
                         </div>
                         <i class="fa fa-plus icon-open" aria-hidden="true"></i>
                         <i class="fa fa-minus icon-close" aria-hidden="true"></i>
@@ -77,8 +88,11 @@
                 </div>
                 <div class="header-separator"></div>
                 <!--Log out -->
+                
                 <div class="header-section">
-                    <a href="pages_sign-in.html" data-toggle="tooltip" data-placement="left" title="Logout"><i class="fa fa-sign-out log-out" aria-hidden="true"></i></a>
+                    <a href="?action=logout" data-toggle="tooltip" data-placement="left" title="Logout">
+                        <i class="fa fa-sign-out log-out" aria-hidden="true"></i>
+                    </a>
                 </div>
             </div>
         </div>

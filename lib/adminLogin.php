@@ -1,4 +1,7 @@
 <?php 
+	include_once("Session.php");
+	Session::init();
+
 	include_once("Database.php");
 	include_once("Format.php");
 ?>
@@ -24,8 +27,12 @@
 				if ($result != false) {
 					$value = $result->fetch_assoc();
 
-					//For Session 
-
+					//For Session
+					Session::set("adminLogin", true); 
+					Session::set("adminId", $value['id']); 
+					Session::set("adminUser", $value['username']); 
+					Session::set("adminName",$value['name']); 
+					Session::set("adminRole",$value['role']); 
 
 					header("Location:index.php");
 				}
