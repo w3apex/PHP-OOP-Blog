@@ -43,7 +43,6 @@
                                 $upload_img = $file_path.$image;
                                
                                 move_uploaded_file($file_tmp, $upload_img);
-                               //move_uploaded_file($file_tmp, "uploads/".$image);
 
                                 $query = "INSERT INTO posts(cat, title, image, content, tag, author) 
                                          VALUES('$cat', '$title', '$upload_img', '$content', '$tag', '$author')";
@@ -100,7 +99,7 @@
                                                     if ($cats) {
                                                         while ( $result = $cats->fetch_assoc()) {
                                                 ?>
-                                                <option value="<?php echo $result['name'];?>"><?php echo $result['name'];?></option>
+                                                <option value="<?php echo $result['id'];?>"><?php echo $result['name'];?></option>
                                                 <?php } } ?>
                                             </select>
                                         </div>

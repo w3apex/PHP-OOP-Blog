@@ -34,43 +34,6 @@
             <!-- For messaging -->
         	<div class="row">
              <div class="col-md-8 col-md-offset-2">
-                <?php
-                    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-
-                        if (!empty($_POST['cat']) && !empty($_POST['title']) && !empty($_FILES['image']['name']) && !empty($_POST['content']) && !empty($_POST['tag']) && !empty($_POST['author'])) {
-                            
-                            $cat     = $_POST['cat'];
-                            $title   = $_POST['title'];
-                            $content = $_POST['content'];
-                            $tag     = $_POST['tag'];
-                            $author  = $_POST['author'];
-
-                            $image = $fileObj->uploadFile($_FILES['image']);
-                            if ($image == true) {
-                                $file_tmp = $_FILES['image']['tmp_name'];
-                                $file_path = "uploads/";
-                                $upload_img = $file_path.$image;
-                               
-                                move_uploaded_file($file_tmp, $upload_img);
-                               //move_uploaded_file($file_tmp, "uploads/".$image);
-
-                                $query = "INSERT INTO posts(cat, title, image, content, tag, author) 
-                                         VALUES('$cat', '$title', '$upload_img', '$content', '$tag', '$author')";
-                                $postInsert = $db->insert($query);
-
-                                if ($postInsert) {
-                                    echo "<span style='color:green;font-size:18px;'>Post inserted succefully.</span>";
-                                } 
-                                else {
-                                    echo "<span style='color:red;font-size:18px;'>Post not inserted !!</span>";
-                                }
-                            }
-                        }
-                        else {
-                            echo "<span style='color:red;font-size:18px;'>Field must not be empty !!</span>";
-                        } 
-                    }
-                ?>
              </div>   
             </div>
             <!-- For messaging./ -->
@@ -116,22 +79,15 @@
                                                     if ($cats) {
                                                         while ( $catsResult = $cats->fetch_assoc()) {
                                                 ?>
-                                                <option <?php echo ($result['cat'] == $catsResult['id']) ? "selected" : 0;?> value="<?php echo $result['name'];?>"><?php echo $catsResult['name'];?></option>
+                                                <option <?php echo ($result['cat'] == $catsResult['id']) ? "selected" : 0;?> value="<?php echo $catsResult['id']; ?>"><?php echo $catsResult['name'];?></option>
                                                 <?php } } ?> 
                                             </select>
                                         </div>
                                     </div>
-                                    <!-- <select id="cars">
-                                      <option >Select an option</option>
-                                      <option value="volvo"  >Volvo</option>
-                                      <option value="saab">Saab</option>
-                                      <option selected value="vw">VW</option>
-                                      <option value="audi">Audi</option>
-                                    </select> -->
                                     <div class="form-group">
                                         <label for="image" class="col-sm-2 control-label">Image</label>
                                         <div class="col-sm-10">
-                                            <img src="<?php echo $result['image'];?>" height="40" width="80">
+                                            <img src="<?php echo $result['image'];?>" width="80" height="40">
                                             <input type="file" class="form-control" name="image" id="image">
                                         </div>
                                     </div>
@@ -167,6 +123,67 @@
                                 </form>
                                 <?php } ?>
                             </div>
+                            <?php
+                                if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+
+                                    if (!empty($_POST['cat']) && !empty($_POST['title']) && !empty($_POST['content']) && !empty($_POST['tag']) && !empty($_POST['author'])) {
+                                        
+                                        $cat     = $_POST['cat'];
+                                        $title   = $_POST['title'];
+                                        $content = $_POST['content'];
+                                        $tag     = $_POST['tag'];
+                                        $author  = $_POST['author'];
+
+                                        if (!empty($_FILES['image']['name'])) {
+                                            $image = $fileObj->uploadFile($_FILES['image']);
+                                            if ($image == true) {
+                                                $file_tmp = $_FILES['image']['tmp_name'];
+                                                $file_path = "uploads/";
+                                                $upload_img = $file_path.$image;
+
+                                                
+                                                unlink($result['image']);
+
+                                                move_uploaded_file($file_tmp, $upload_img);
+                                                $query = "UPDATE posts SET
+                                                        cat     = '$cat',
+                                                        title   = '$title',
+                                                        image   = '$upload_img',
+                                                        content = '$content',
+                                                        tag     = '$tag',
+                                                        author  = '$author' WHERE id = '$id'";         
+                                                $updatePost = $db->insert($query);
+
+                                                if ($updatePost) {
+                                                    echo "<span style='color:green;font-size:18px;'>Post updated succefully.</span>";
+                                                } 
+                                                else {
+                                                    echo "<span style='color:red;font-size:18px;'>Post not updated !!</span>";
+                                                }
+                                            }
+                                        } 
+                                        else {
+                                            $query = "UPDATE posts SET
+                                                    cat     = '$cat',
+                                                    title   = '$title',
+                                                    content = '$content',
+                                                    tag     = '$tag',
+                                                    author  = '$author' WHERE id = '$id'";         
+                                            $updatePost = $db->insert($query);
+
+                                            if ($updatePost) {
+                                                echo "<span style='color:green;font-size:18px;'>Post updated succefully.</span>";
+                                            } 
+                                            else {
+                                                echo "<span style='color:red;font-size:18px;'>Post not updated !!</span>";
+                                            }
+                                        }   
+                                    }
+                                    else {
+                                        echo "<span style='color:red;font-size:18px;'>Field must not be empty !!</span>";
+                                    } 
+                                }
+                            ?>
                         </div>
                     </div>
                 </div>

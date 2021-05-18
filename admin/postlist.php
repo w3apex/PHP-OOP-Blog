@@ -1,19 +1,29 @@
 <?php include('inc/_header.php');?>
 <?php
-    if (!isset($_GET['delid']) || $_GET['delid']== NULL) {
-        header("Location:catlist.php");
-    } 
-    else {
+    if (isset($_GET['delid'])) {
         $id = $_GET['delid'];
-    }
+        
+    	//For deleting from directory
+    	$sql = "SELECT * FROM posts WHERE id = '$id'";
+    	$getData = $db->select($sql);
+    	if ($getData) {
+	    	while ( $delImg = $getData->fetch_assoc()) {
+	    		$delDir = $delImg['image'];
+	    		unlink($delDir);
+	    	}
+	    } 
 
-    $sql = "DELETE FROM category WHERE id = '$id'";
-    $del = $db->delete($sql);
-    if ($del) {
-        echo "<span style='color:green;font-size:18px;'>Category deleted succefully.</span>";
-    } 
-    else {
-        echo "<span style='color:red;font-size:18px;'>Category not deleted !!</span>";
+	    //For deleting from database
+	    $sql = "DELETE FROM posts WHERE id = '$id'";
+	    $delPost = $db->delete($sql);
+
+	    if ($delPost) {
+	    	echo "<span style='color:green;font-size:18px;'>Post deleted succefully.</span>";
+	    } 
+	    else {
+	    	echo "<span style='color:red;font-size:18px;'>Post not deleted !!</span>";
+	    }
+	    
  	}
 ?>
 <div class="page-body">
@@ -60,9 +70,6 @@
 	                            </thead>
 	                            <tbody>
 	                            	<?php
-										/*$query = "SELECT * FROM posts ORDER BY id";
-										$query = "SELECT * FROM category ORDER BY id";*/
-
 										$query = "SELECT posts.*, category.name FROM posts INNER JOIN category
 												ON posts.cat = category.id ORDER BY posts.id";
 

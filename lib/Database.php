@@ -66,7 +66,4 @@ class Database {
 
 }
 
-/*$db = new Database();
-$db->select($query);*/
-
 ?>
