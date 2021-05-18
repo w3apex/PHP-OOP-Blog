@@ -1,3 +1,11 @@
+<?php include("config/config.php");?>
+<?php include("lib/Database.php");?>
+<?php include("lib/Format.php");?>
+
+<?php
+  $db = new Database();
+  $fm = new Format();
+?>
 <!DOCTYPE html>
 <html lang="en">
 
