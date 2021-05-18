@@ -5473,3 +5473,6 @@ html.left-sidebar-top .c-hamburger span {
 }
 
 /*# sourceMappingURL=style.css.map */
+
+.success {font-size: 17px; color: green;}
+.error {font-size: 17px; color: red;}

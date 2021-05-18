@@ -13,7 +13,7 @@ class Format {
 		return $string;
 	}
 
-	public function validation($data) {
+	public function validation($data) { //$data['cat'];
 		$data = trim($data);
 		$data = stripcslashes($data);
 		$data = htmlspecialchars($data);

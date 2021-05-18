@@ -1,8 +1,8 @@
 <?php 
-	include("Database.php");
-	include("Format.php");
+	include_once("Database.php");
+	include_once("Format.php");
+	include_once("File.php");
 ?>
-
 <?php
 	class Post {
 
@@ -10,73 +10,69 @@
 		private $fm;
 		
 		public function __construct() {
-			$this->db = new Database();
-			$this->fm = new Format();
+			$this->db      = new Database();
+			$this->fm      = new Format();
+			$this->fileObj = new File();
 		}
 
-		public function show() { //Get all Data/Categories 
-			$query = "SELECT * FROM posts ORDER BY id DESC";
+		public function show() {
+	        $query = "SELECT posts.*, category.name FROM posts INNER JOIN category
+					ON posts.cat = category.id ORDER BY posts.id";
 	        $result = $this->db->select($query);
 
 	        return $result;
 		}
 
-		public function store($data) { //Insert Data/posts
-			$name = $this->fm->validation($data);
+		public function store($data, $file) { 
+			//$data = $_POST;
+			//$_POST['cat'];
+			//$data['cat'];
 
-			if (!empty($name)) {
-				$query = "INSERT INTO posts(name) VALUES('$name')";
-				$catInsert = $this->db->insert($query);
+			if (!empty($data['cat']) && !empty($data['title']) && !empty($file['image']['name']) && !empty($data['content']) && !empty($data['tags']) && !empty($data['author'])) {
+            	
+            	//$cat = $data['cat'] == $cat = $_POST['cat'];
 
-				if ($catInsert) {
-	                return $msg = "<span class='success'>Post inserted successfully..</span>";
-	            } 
-	            else {
-	                return $msg = "<span class='error'>Post not inserted !!</span>";
+            	$cat     = $this->fm->validation($data['cat']);
+            	$title   = $this->fm->validation($data['title']);
+            	$content = $this->fm->validation($data['content']);
+            	$tags    = $this->fm->validation($data['tags']);
+            	$author  = $this->fm->validation($data['author']);
+
+	            $image = $this->fileObj->uploadFile($file['image']);
+	            if ($image == true) {
+	                $file_tmp = $file['image']['tmp_name'];
+	                $file_path = "uploads/";
+	                $upload_img = $file_path.$image;
+	               
+	                move_uploaded_file($file_tmp, $upload_img);
+
+	                $query = "INSERT INTO posts(cat, title, image, content, tags, author) 
+	                         VALUES('$cat', '$title', '$upload_img', '$content', '$tags', '$author')";
+	                $result = $this->db->insert($query);
+
+	                if ($result) {
+	                    return $msg = "<span class='success'>Post inserted successfully..</span>";
+	                } 
+	                else {
+	                    return $msg = "<span class='error'>Post not inserted !!</span>";
+	                }
 	            }
-			} 
-			else {
-				return $msg = "<span class='error'>Field must not be empty</span>";
-			}   
+	        }
+	        else {
+	            return $msg = "<span class='error'>Field must not be empty</span>";
+	        }   
 		}
 
-		public function edit($id) { //Get single Data/Categories
-			$query = "SELECT * FROM posts WHERE id = '$id'";
-            $result = $this->db->select($query);
+		public function edit($id) {
 
-            return $result;
 		}
 
-		public function update($data, $id) { //Update Data/posts
-			$name = $this->fm->validation($data);
-
-			if (!empty($name)) {
-				$query = "UPDATE posts SET name = '$name' WHERE id = '$id'";
-
-		        $result = $this->db->update($query);
-
-		        if ($result) {
-		            return $msg = "<span class='success'>Post updated successfully..</span>";
-		        } 
-		        else {
-		            return $msg = "<span class='error'>Post not updated !!</span>";
-		        }
-			} 
-			else {
-				return $msg = "<span class='error'>Field must not be empty</span>";
-			}	
+		public function update($data, $id) {
+	
 		}
 
-		public function destroy($id) { //Delete Data/posts
-			$query = "DELETE FROM posts WHERE id = '$id'";
-		    $result = $this->db->delete($query);
-		    if ($result) {
-		        return $msg = "<span class='success'>Post deleted successfully..</span>";
-		    } 
-		    else {
-		        $msg = "<span class='error'>Post not deleted !!</span>";
-		        return $msg;
-		 	}
+		public function destroy($id) {
+
 		}
 
 	}

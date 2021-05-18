@@ -1,8 +1,7 @@
 <?php 
-	include("Database.php");
-	include("Format.php");
+	include_once("Database.php");
+	include_once("Format.php");
 ?>
-
 <?php
 	class Category {
 
