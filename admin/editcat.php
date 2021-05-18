@@ -1,10 +1,23 @@
 <?php include('inc/_header.php');?>
 <?php
-    if (!isset($_GET['editid']) || $_GET['editid']== NULL) {
+    include('../lib/Category.php');
+    $cat = new Category();
+?>
+
+<?php
+    if (!isset($_GET['editid']) || $_GET['editid'] == NULL) {
         header("Location:catlist.php");
     } 
     else {
         $id = $_GET['editid'];
+    }
+?>
+
+<?php
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        $name = $_POST['name'];
+
+        $updateCat = $cat->update($name, $id);
     }
 ?>
 <div class="page-body">
@@ -29,26 +42,15 @@
             <!-- For messaging -->
         	<div class="row">
              <div class="col-md-8 col-md-offset-2">
-                 <?php
-                    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-                        $name = $_POST['name'];
-
-                        $query = "UPDATE category SET name = '$name' WHERE id = '$id'";
-
-                        $catInsert = $db->update($query);
-
-                        if ($catInsert) {
-                            echo "<span style='color:green;font-size:18px;'>Category updated succefully.</span>";
-                        } 
-                        else {
-                            echo "<span style='color:red;font-size:18px;'>Category not updated !!</span>";
-                        }
-                    }
-                ?>
              </div>   
             </div>
             <!-- For messaging./ -->
             <div class="col-sm-12 col-md-8 col-md-offset-2">
+                <?php
+                    if (isset($updateCat)) {
+                        echo $updateCat;
+                    }
+                ?>
                 <div class="panel b-primary bt-md">
                     <div class="panel-content">
 
@@ -65,13 +67,12 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <?php
-                                    $query = "SELECT * FROM category WHERE id = '$id'";
-                                    $cats = $db->select($query);
+                                    $editCat = $cat->edit($id);
 
-                                    if ($cats) {
-                                        $result = $cats->fetch_assoc();
+                                    if ($editCat) {
+                                        $result = $editCat->fetch_assoc();
                                 ?>
-                                <form action="" method="POST" class="form-horizontal" enctype="multipart/form-data">
+                                <form action="" method="POST" class="form-horizontal">
                                     <div class="form-group">
                                         <label for="name" class="col-sm-3 control-label">Category Name</label>
                                         <div class="col-sm-9">
@@ -81,7 +82,7 @@
 
                                     <div class="form-group">
                                         <div class="col-sm-offset-3 col-sm-9">
-                                            <button type="submit" class="btn btn-primary" name="catSubmit">Update</button>
+                                            <button type="submit" class="btn btn-primary">Update</button>
                                         </div>
                                     </div>
                                 </form>

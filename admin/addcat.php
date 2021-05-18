@@ -1,4 +1,16 @@
-<?php include('inc/_header.php');?>
+<?php include('inc/_header.php'); ?>
+<?php
+    include('../lib/Category.php');
+    $cat = new Category();
+
+    //For inserting process
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    //if ($_POST['catSubmit'] == TRUE) {
+        $name = $_POST['name'];
+
+        $insertCat = $cat->store($name);
+    }
+?>
 <div class="page-body">
     <!-- LEFT SIDEBAR -->
     <?php include('inc/_sidebar.php');?>
@@ -21,30 +33,18 @@
             <!-- For messaging -->
         	<div class="row">
              <div class="col-md-8 col-md-offset-2">
-                 <?php
-                    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-                        $name = $_POST['name'];
-
-                        $query = "INSERT INTO category(name) VALUES('$name')";
-                        $catInsert = $db->insert($query);
-
-                        if ($catInsert) {
-                            echo "<span style='color:green;font-size:18px;'>Category inserted succefully.</span>";
-                        } 
-                        else {
-                            echo "<span style='color:red;font-size:18px;'>Category not inserted !!</span>";
-                        }
-                    }
-                ?>
              </div>   
             </div>
             <!-- For messaging./ -->
             <div class="col-sm-12 col-md-8 col-md-offset-2">
+                <?php
+                    if (isset($insertCat)) {
+                        echo $insertCat;
+                    }
+                ?>
                 <div class="panel b-primary bt-md">
                     <div class="panel-content">
-
                         <div class="row">
-                            
                             <div class="col-xs-6">
                                 <h4>Add New Category</h4>
                             </div>
@@ -71,6 +71,7 @@
                                 </form>
                             </div>
                         </div>
+
                     </div>
                 </div>
             </div>

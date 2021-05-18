@@ -1,20 +1,14 @@
 <?php include('inc/_header.php');?>
 <?php
-    if (!isset($_GET['delid']) || $_GET['delid']== NULL) {
-        header("Location:catlist.php");
-    } 
-    else {
-        $id = $_GET['delid'];
-    }
+    include('../lib/Category.php');
+    $cat = new Category();
+?>
+<?php
+	if (isset($_GET['delid'])) {
+		$id = $_GET['delid'];
 
-    $sql = "DELETE FROM category WHERE id = '$id'";
-    $del = $db->delete($sql);
-    if ($del) {
-        echo "<span style='color:green;font-size:18px;'>Category deleted succefully.</span>";
-    } 
-    else {
-        echo "<span style='color:red;font-size:18px;'>Category not deleted !!</span>";
- 	}
+		$delCat = $cat->destroy($id);
+	}
 ?>
 <div class="page-body">
     <!-- LEFT SIDEBAR -->
@@ -33,6 +27,11 @@
 		</div>
 		<div class="row animated fadeInUp">
 	        <div class="col-sm-12 col-md-8 col-md-offset-2">
+	        	<?php
+                    if (isset($delCat)) {
+                        echo $delCat;
+                    }
+                ?>
 	            <div class="panel b-primary bt-md">
 	                <div class="panel-content">
 	                    <div class="row">
@@ -47,19 +46,19 @@
 	                        <table id="basic-table" class="data-table table table-striped nowrap table-hover table-bordered" cellspacing="0" width="100%">
 	                            <thead>
 		                            <tr>
-		                                <th>SL.</th>
-		                                <th>Category Name</th>
-		                                <th>Action</th>
+		                                <th width="10%">SL.</th>
+		                                <th width="60%">Category Name</th>
+		                                <th width="30%">Action</th>
 		                            </tr>
 	                            </thead>
 	                            <tbody>
 	                            	<?php
-	                            		$query = "SELECT * FROM category ORDER BY id";
-	                            		$cats = $db->select($query);
+	                            		//For selecting all dada
+	                            		$showCats = $cat->show();
 
-	                            		if ($cats) {
+	                            		if ($showCats) {
 	                            			$i = 0;
-	                            			while ( $result = $cats->fetch_assoc()) {
+	                            			while ( $result = $showCats->fetch_assoc()) {
 	                            				$i++;
 	                            	?>
 	                            	<tr>
@@ -81,4 +80,4 @@
 	            </div>
 	        </div>
 		</div>
-<?php include('inc/_footer.php');?>  
+<?php include('inc/_footer.php');?> 
