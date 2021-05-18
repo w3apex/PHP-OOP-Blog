@@ -1,9 +1,7 @@
 <?php
 
 class File {
-	
 	private $supportedFormats = ['image/jpg','image/jpeg','image/png','image/gif'];
-
 
 	public function uploadFile($file){ //$_FILES['image']
 		if (is_array($file)) {
@@ -21,7 +19,7 @@ class File {
 						echo "<span color='red'>File format no match. Allowed only : (jpg, jpeg, png, gif) !!</span>";
 					}
 				}
-				 else {
+				else {
 					echo "<span color='red'>Please select an image!!</span>";
 				}
 			} 

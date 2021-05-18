@@ -7,7 +7,6 @@
         </div>
     </div>
     <!-- NAVIGATION -->
-    <!-- ========================================================= -->
     <div id="left-nav" class="nano">
         <div class="nano-content">
             <nav>

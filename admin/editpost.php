@@ -3,6 +3,15 @@
     include("../lib/File.php"); 
     $fileObj = new File();
 ?>
+
+<?php
+    if (!isset($_GET['editid']) || $_GET['editid'] == NULL) {
+        header("Location:postlist.php"); //redirect
+    } 
+    else {
+        $id = $_GET['editid'];
+    }
+?>
 <div class="page-body">
     <!-- LEFT SIDEBAR -->
     <?php include('inc/_sidebar.php');?>
@@ -25,7 +34,7 @@
             <!-- For messaging -->
         	<div class="row">
              <div class="col-md-8 col-md-offset-2">
-                 <?php
+                <?php
                     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                         if (!empty($_POST['cat']) && !empty($_POST['title']) && !empty($_FILES['image']['name']) && !empty($_POST['content']) && !empty($_POST['tag']) && !empty($_POST['author'])) {
@@ -70,7 +79,7 @@
                     <div class="panel-content">
                         <div class="row">
                             <div class="col-xs-6">
-                                <h4>Add New Post</h4>
+                                <h4>Edit Post</h4>
                             </div>
                             <div class="col-xs-6 text-right">
                                 <a href="postlist.php" class="btn btn-primary">All Post</a>
@@ -79,12 +88,19 @@
 
                         <div class="row">
                             <div class="col-md-12">
+                                <?php
+                                    $query = "SELECT * FROM posts WHERE id = '$id'";
+                                    $post = $db->select($query);
+
+                                    if ($post) {
+                                        $result = $post->fetch_assoc();
+                                ?>
                                 <form action="" method="POST" class="form-horizontal" enctype="multipart/form-data">
 
                                     <div class="form-group">
                                         <label for="title" class="col-sm-2 control-label">Title</label>
                                         <div class="col-sm-10">
-                                            <input type="text" class="form-control" name="title" id="title" placeholder="Post Title">
+                                            <input type="text" class="form-control" name="title" id="title" value="<?php echo $result['title'];?>">
                                         </div>
                                     </div>
 
@@ -94,21 +110,28 @@
                                             <select class="form-control" name="cat" id="cat">
                                                 <option>Select Category</option>
                                                 <?php
-                                                    $query = "SELECT * FROM category";
-                                                    $cats = $db->select($query);
+                                                    $sql = "SELECT * FROM category";
+                                                    $cats = $db->select($sql);
 
                                                     if ($cats) {
-                                                        while ( $result = $cats->fetch_assoc()) {
+                                                        while ( $catsResult = $cats->fetch_assoc()) {
                                                 ?>
-                                                <option value="<?php echo $result['name'];?>"><?php echo $result['name'];?></option>
-                                                <?php } } ?>
+                                                <option <?php echo ($result['cat'] == $catsResult['id']) ? "selected" : 0;?> value="<?php echo $result['name'];?>"><?php echo $catsResult['name'];?></option>
+                                                <?php } } ?> 
                                             </select>
                                         </div>
                                     </div>
-
+                                    <!-- <select id="cars">
+                                      <option >Select an option</option>
+                                      <option value="volvo"  >Volvo</option>
+                                      <option value="saab">Saab</option>
+                                      <option selected value="vw">VW</option>
+                                      <option value="audi">Audi</option>
+                                    </select> -->
                                     <div class="form-group">
                                         <label for="image" class="col-sm-2 control-label">Image</label>
                                         <div class="col-sm-10">
+                                            <img src="<?php echo $result['image'];?>" height="40" width="80">
                                             <input type="file" class="form-control" name="image" id="image">
                                         </div>
                                     </div>
@@ -116,30 +139,33 @@
                                     <div class="form-group">
                                         <label for="content" class="col-sm-2 control-label">Content</label>
                                         <div class="col-sm-10">
-                                            <textarea name="content" id="content" class="form-control"></textarea>
+                                            <textarea name="content" id="content" class="form-control">
+                                                <?php echo $result['content'];?>
+                                            </textarea>
                                         </div>
                                     </div>
 
                                     <div class="form-group">
                                         <label for="tag" class="col-sm-2 control-label">Tags</label>
                                         <div class="col-sm-10">
-                                            <input type="text" class="form-control" name="tag" id="tag" placeholder="Tags">
+                                            <input type="text" class="form-control" name="tag" id="tag" value="<?php echo $result['tag'];?>">
                                         </div>
                                     </div>
 
                                     <div class="form-group">
                                         <label for="author" class="col-sm-2 control-label">Author</label>
                                         <div class="col-sm-10">
-                                            <input type="text" class="form-control" name="author" id="author" placeholder=" Author">
+                                            <input type="text" class="form-control" name="author" id="author" value="<?php echo $result['author'];?>">
                                         </div>
                                     </div>
 
                                     <div class="form-group">
                                         <div class="col-sm-offset-2 col-sm-10">
-                                            <button type="submit" class="btn btn-primary" name="catSubmit">Save</button>
+                                            <button type="submit" class="btn btn-primary" name="catSubmit">Update</button>
                                         </div>
                                     </div>
                                 </form>
+                                <?php } ?>
                             </div>
                         </div>
                     </div>
