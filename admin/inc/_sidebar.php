@@ -30,6 +30,15 @@
                             <li><a href="postlist.php">All Post</a></li>
                         </ul>
                     </li>
+
+                    <!--Category-->
+                    <li class="has-child-item close-item">
+                        <a><i class="fa fa-pie-chart" aria-hidden="true"></i><span>Slider Option</span> </a>
+                        <ul class="nav child-nav level-1">
+                            <li><a href="addslider.php">Create Slider</a></li>
+                            <li><a href="sliderlist.php">All Slider</a></li>
+                        </ul>
+                    </li>
                 </ul>
             </nav>
         </div>

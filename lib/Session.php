@@ -19,6 +19,20 @@ class Session {
 		}
 	}
 
+	public static function checkSession() {
+		self::init();
+		if (self::get('adminLogin') == false) {
+			self::destroy();
+		}
+	}
+
+	public static function checkLogin() {
+		self::init();
+		if (self::get('adminLogin') == true) {
+			header("Location:index.php");
+		}
+	}
+
 	public static function destroy() {
 		session_destroy();
 		header("Location:login.php");

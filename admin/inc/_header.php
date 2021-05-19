@@ -1,6 +1,6 @@
 <?php
     include ("../lib/Session.php");
-    Session::init();
+    Session::checkSession();
     //session_start();
     //$sess = new Session();
     //$sess->init();

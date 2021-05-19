@@ -1,6 +1,6 @@
 <?php 
 	include_once("Session.php");
-	Session::init();
+	Session::checkLogin();
 
 	include_once("Database.php");
 	include_once("Format.php");
