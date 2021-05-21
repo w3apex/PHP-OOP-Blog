@@ -1,10 +1,16 @@
-<?php include("config/config.php");?>
+<?php //include("config/config.php");?>
+<?php 
+  include("lib/Session.php");
+  Session::init();
+?>
 <?php include("lib/Database.php");?>
 <?php include("lib/Format.php");?>
+<?php include("lib/User.php");?>
 
 <?php
-  $db = new Database();
-  $fm = new Format();
+  $db  = new Database();
+  $fm  = new Format();
+  $usr = new User();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -49,10 +55,31 @@
           <!-- <a href="index.html" class="logo mr-auto"><img src="assets/img/logo.png" alt=""></a>-->
 
           <nav class="nav-menu d-none d-lg-block">
+            <?php
+              if (isset($_GET['userid'])) {
+                Session::destroy();
+              }
+            ?>
             <ul>
               <li class="active"><a href="index.php">Home</a></li>
               <li><a href="about.php">About</a></li>
+              <?php
+                $login = Session::get("userLogin");
+                if ($login == true) {
+              ?>
+                <li><a href="profile.php">Profile</a></li>
+              <?php } ?>
+
               <li><a href="#contact">Contact</a></li>
+              <?php
+                $login = Session::get("userLogin");
+                if ($login == false) {
+              ?>
+                <li><a href="register.php">Register</a></li>
+                <li><a href="login.php">Login</a></li>
+              <?php } else { ?>
+                <li><a href="?userid=<?php Session::get("userId"); ?>">Logout</a></li>
+              <?php } ?>
             </ul>
           </nav><!-- .nav-menu -->
         </div>
